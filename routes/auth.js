@@ -1,9 +1,12 @@
 const bcrypt = require("bcrypt");
-const User = require('./models/User');
+const User = require('../models/User');
+const express = require("express");
 const jwt = require("jsonwebtoken");
+const router = express.Router();
+
 require("dotenv").config();
 
-app.post("/signup", async (req, res) => {
+router.post("/signup", async (req, res) => {
     const {username, password, email} = req.body;
     
     const existing = await User.findOne({ email });
@@ -34,7 +37,7 @@ app.post("/signup", async (req, res) => {
     
 })
 
-app.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
     const {email, password} = req.body;
 
     const user = await User.findOne({ email });
@@ -62,3 +65,5 @@ app.post("/login", async (req, res) => {
         token
     });
 })
+
+module.exports = router;
