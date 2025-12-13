@@ -1,6 +1,7 @@
 const express = require("express");
 const Habit = require("../models/habit");
 const auth = require("../middleware/auth");
+const habitLog = require("../models/habitLog");
 
 const router = express.Router();
 
@@ -61,4 +62,38 @@ router.delete("/:id", auth, async(req, res) => {
     }
 });
 
+router.post("/:id/toggle", auth, async(req, res) => {
+    try {
+        const habitId = req.params.id;
+        const userId = req.userId;
+
+        const date = req.body.date ||
+        new Date().toISOString().split("T")[0];
+
+        const existingLog = await Habit.findOne({
+            habitId,
+            userId,
+            date
+        })
+
+        if(existingLog) {
+            await habitLog.deleteOne({ _id: existingLog._id });
+            return res.json({
+                status: "removed", date
+            });
+        }
+
+        await habitLog.create({
+            habitId,
+            userId,
+            date
+        });
+
+        return res.json({ status: "added", date });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error:"server error"});
+    }
+});
 module.exports = router;
