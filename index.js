@@ -2,7 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+
 const authRoutes = require("./routes/auth")
+const habitRoutes = require("./routes/habit")
 
 const app = express();
 app.use(express.json())
@@ -17,6 +19,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/auth", authRoutes)
+app.use("/habit", habitRoutes);
 
 app.listen(3000, () => {
     console.log("running on port 3000 http://localhost:3000");

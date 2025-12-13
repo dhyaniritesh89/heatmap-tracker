@@ -1,8 +1,8 @@
 const mongoose = require ("mongoose");
 
-const userSchema = new mongoose.Schema({
+const habitSchema = new mongoose.Schema({
     userId: {
-        type: ObjectId,
+        type: mongoose.ObjectId,
         ref: "User",
         required: true
     },
